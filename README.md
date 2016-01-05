@@ -62,3 +62,4 @@ Qwik-hosts works well as-is, but there is always room in a project for improveme
 * List host files succinctly and display whether they're enabled or disabled
 * Parse description comment out of file and display when listing
 * Implement qwik mv and qwik cp
+* Add note to hosts file saying what modules were included and add status line to qwik list showing whether these match the currently enabled host modules
