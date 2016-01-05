@@ -28,7 +28,7 @@ $ qwik list
 _default.........................(enabled)
 ```
 
-You should not disable or remove this host file as it is required by OS X during the boot process. Note that if you are not on OS X you will have to replace this default host file with the default host file from your OS. Do this using `qwik edit _default'.
+You should not disable or remove this host file as it is required by OS X during the boot process. Note that if you are not on OS X you will have to replace this default host file with the default host file from your OS. Do this using `qwik edit _default`.
 
 Now you can take your kludged-together host file and split it up into manageable pieces. Use `qwik add <host-file>` to add a new host file and paste in a section from your old file. To enable it, run `qwik enable <host-file>`.
 
