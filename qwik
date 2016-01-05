@@ -129,11 +129,14 @@ EOM
 }
 
 list_hosts() {
-  echo "Enabled:"
-  ls $DIR_HOSTS_ENABLED
-  echo
-  echo "Available:"
-  ls $DIR_HOSTS_AVAILABLE
+  for host in `ls $DIR_HOSTS_AVAILABLE`; do
+      enabled_str="disabled"
+    if [ -h "$DIR_HOSTS_ENABLED/$host" ]; then
+      enabled_str="enabled"
+    fi
+    printf "%-30s %11s" $host "($enabled_str)"
+    echo
+  done
 }
 
 show_info() {
