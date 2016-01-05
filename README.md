@@ -63,3 +63,5 @@ Qwik-hosts works well as-is, but there is always room in a project for improveme
 * Parse description comment out of file and display when listing
 * Implement qwik mv and qwik cp
 * Add note to hosts file saying what modules were included and add status line to qwik list showing whether these match the currently enabled host modules
+* Add env variable that overrides _default hosts file content (to support other OSes)
+* Add qwik lock/unlock <file>... command that chowns/chmods the files to prevent tampering without sudo (also use env variables to override the user/group that file gets set to)
