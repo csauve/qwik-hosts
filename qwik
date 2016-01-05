@@ -34,7 +34,12 @@ initialize() {
     mkdir $DIR_HOSTS_ENABLED
   fi
 
-  DEFAULT_HOSTS="
+  if [ -f "$DIR_HOSTS_AVAILABLE/_default" ]; then
+    echo "Error: The _default hosts file already exists. If you really wish to overwrite it, please run 'qwik remove _default' first."
+    exit $ERR_BAD_USAGE
+  fi
+
+  cat >  "$DIR_HOSTS_AVAILABLE/_default" << EOM
 # localhost is used to configure the loopback interface
 # when the system is booting.  Do not change this entry.
 ##
@@ -42,14 +47,8 @@ initialize() {
 255.255.255.255 broadcasthost
 ::1             localhost 
 fe80::1%lo0     localhost
-"
+EOM
 
-  if [ -f "$DIR_HOSTS_AVAILABLE/_default" ]; then
-    "Error: The _default hosts file already exists. If you really wish to overwrite it, please run 'qwik remove _default' first."
-    exit $ERR_BAD_USAGE
-  fi
-
-  echo $DEFAULT_HOSTS > "$DIR_HOSTS_AVAILABLE/_default"
   enable_hosts "_default"
 }
 
@@ -116,12 +115,13 @@ disable_hosts() {
 
 write_hosts_file() {
   rm -f "/etc/hosts"
-  echo "##
+  cat > "/etc/hosts" << EOM
+##
 # Host Database
 # WARNING: This file was automatically generated using qwik-hosts. Any manual changes will be overwritten on the next 'qwik refresh'.
-#          To avoid changes being lost, manage this file using `qwik` instead of hand-bombing.
+#          To avoid changes being lost, manage this file using 'qwik' instead of hand-bombing.
 #
-" > "/etc/hosts"
+EOM
 
   for enabled_host in `ls $DIR_HOSTS_ENABLED`; do
     cat "$DIR_HOSTS_ENABLED/$enabled_host" >> "/etc/hosts"

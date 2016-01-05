@@ -1,5 +1,5 @@
 # qwik-hosts
-Qwik-hosts manages your `/etc/hosts` file so that it doesn't get too unwieldy. Different projects, networks or tasks sometimes require hosts file entries to properly resolve domain names. After a while trying to maintain my hosts file by hand I got fed up and decided it would be much better managed by a program. I first tried to run a local DNS using `dnsmasq` but I found the documentation lacking. More importantly, it lacks the ability to mix and match modular host-file entries, which is
+Qwik-hosts manages your `/etc/hosts` file so that it doesn't get too unwieldy. Different projects, networks or tasks sometimes require different host file entries to properly resolve domain names. After a while trying to maintain my host file by hand I got fed up and decided it would be much better managed by a program. I first tried to run a local DNS using `dnsmasq` but I found the documentation lacking. More importantly, it is missing the ability to mix and match modular host-file entries, which is
 essential to managing multiple projects. Qwik-hosts is a simple solution - a way to easily rewrite your hosts file in a predictable and qwik manner.
 
 Qwik-hosts is written and tested on OS X but it should work on any Unix-like OS that uses an `/etc/hosts` file.
@@ -18,6 +18,7 @@ You need to initialize the `qwik` environment before its first use. Run:
 
 ```
 $ qwik init
+Creating qwik directory tree and installing _default host file...
 ```
 
 Now the environment is ready to go. You should see one host file is already enabled:
@@ -31,16 +32,16 @@ Available:
 _default
 ```
 
-You should not disable or remove this host file as it is required by OS X during the boot process.
+You should not disable or remove this host file as it is required by OS X during the boot process. Note that if you are not on OS X you will have to replace this default host file with the default host file from your OS. Do this using `qwik edit _default'.
 
-Now you can take your kludged-together hosts file and split it up into manageable pieces. Use `qwik add <host-file>` to add a new host file and paste in a section from your old file. To enable it, run `qwik enable <host-file>`.
+Now you can take your kludged-together host file and split it up into manageable pieces. Use `qwik add <host-file>` to add a new host file and paste in a section from your old file. To enable it, run `qwik enable <host-file>`.
 
-One last thing: all we've done so far is define new host files. We haven't actually rewritten the master file at /etc/hosts yet. To do this, run `qwik refresh` (you may want to save a backup first, until you're satisfied that things are working as expected).
+One last thing: all we've done so far is define new host files. We haven't actually rewritten the master file at `/etc/hosts` yet. To do this, run `qwik refresh` (you may want to save a backup first, until you're satisfied that things are working as expected).
 
 For more information on any commands, run `qwik help`.
 
 ## Details
-Qwik-hosts combines multiple `/etc/hosts`-like files into a single `/etc/hosts`. The same rules apply to these modular files as to the regular /etc/hosts file - namely, one DNS entry per line and comments begin with a #. Modular host files live under your user's home directory so they are protected and customizable per user (on the off chance that you're sharing a machine with another dev).
+Qwik-hosts combines multiple `/etc/hosts`-like files into a single `/etc/hosts`. The same rules apply to these modular files as to the regular /etc/hosts file - namely, one DNS entry per line, and comments begin with a #. Modular host files live under your user's home directory so they are protected and customizable per user (on the off chance that you're sharing a machine with another dev).
 
 Qwik-hosts is modeled after Apache's virtual hosts. There are multiple host files defined in hosts-available and those that are enabled are symlinked in hosts-enabled. You can link/unlink/modify these by hand without any adverse effects but it is much easier to manage them using `qwik`'s built-in commands.
 
@@ -61,4 +62,3 @@ Qwik-hosts works well as-is, but there is always room in a project for improveme
 * List host files succinctly and display whether they're enabled or disabled
 * Parse description comment out of file and display when listing
 * Implement qwik mv and qwik cp
-* Put warning at top of /etc/hosts
