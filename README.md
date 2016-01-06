@@ -51,7 +51,11 @@ Just in case you're using `qwik` as part of a script, it may be helpful to know 
 * `1` - Your environment is not set up properly to run `qwik`. Define any environment variables listed in the output.
 * `2` - Bad usage. Check the output message and/or help documentation to figure out why your command was incorrect.
 
-## Todo
+## Development
+### Running Tests
+Tests follow the [roundup](http://bmizerany.github.io/roundup/) shell unit testing framework. Install roundup using `brew install roundup`. Run all tests using `roundup tests/*`, or run a specific test using `roundup tests/refresh-test.sh`. *Important:* These tests must be run from within the root directory of the repository.
+
+### Todo
 Qwik-hosts works well as-is, but there is always room in a project for improvement. I have the following features in mind for future development:
 
 * Auto-refresh host file after disabling/removing a modular file
@@ -60,3 +64,4 @@ Qwik-hosts works well as-is, but there is always room in a project for improveme
 * Add note to hosts file saying what modules were included and add status line to qwik list showing whether these match the currently enabled host modules
 * Add env variable that overrides _default hosts file content (to support other OSes)
 * Add qwik lock/unlock <file>... command that chowns/chmods the files to prevent tampering without sudo (also use env variables to override the user/group that file gets set to)
+* Figure out a better way for tests to get env variables then from the *actual* `~/.qwikrc`

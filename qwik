@@ -8,8 +8,13 @@ if [ -f $CONFIG_FILE ]; then
   source $CONFIG_FILE
 fi
 
+# Set default config variables
 if [ -z $DIR_QWIK ]; then
   DIR_QWIK="$HOME/.qwik"
+fi
+
+if [ -z $HOSTS_FILE ]; then
+  HOSTS_FILE="/etc/hosts"
 fi
 
 DIR_HOSTS_AVAILABLE="$DIR_QWIK/hosts-available"
@@ -39,7 +44,7 @@ initialize() {
     exit $ERR_BAD_USAGE
   fi
 
-  cat >  "$DIR_HOSTS_AVAILABLE/_default" << EOM
+  cat > "$DIR_HOSTS_AVAILABLE/_default" << EOM
 # localhost is used to configure the loopback interface
 # when the system is booting.  Do not change this entry.
 ##
@@ -61,7 +66,11 @@ check_env() {
 
 add_hosts() {
   for file_name in "$@"; do
-    edit_host "$file_name"
+    if [ -f "$DIR_HOSTS_AVAILABLE/$file_name" ]; then
+      echo "Error: $file_name already exists. Use 'qwik edit $file_name'."
+      exit $ERR_BAD_USAGE
+    fi
+    echo "# $file_name" > "$DIR_HOSTS_AVAILABLE/$file_name"
   done
 
   # Need to do a refresh. todo
@@ -114,8 +123,8 @@ disable_hosts() {
 }
 
 write_hosts_file() {
-  rm -f "/etc/hosts"
-  cat > "/etc/hosts" << EOM
+  rm -f $HOSTS_FILE
+  cat > $HOSTS_FILE << EOM
 ##
 # Host Database
 # WARNING: This file was automatically generated using qwik-hosts. Any manual changes will be overwritten on the next 'qwik refresh'.
@@ -124,7 +133,7 @@ write_hosts_file() {
 EOM
 
   for enabled_host in `ls $DIR_HOSTS_ENABLED`; do
-    cat "$DIR_HOSTS_ENABLED/$enabled_host" >> "/etc/hosts"
+    cat "$DIR_HOSTS_ENABLED/$enabled_host" >> $HOSTS_FILE
   done
 }
 
@@ -157,7 +166,7 @@ show_help() {
   echo "  Creates the basic infrastructure to support qwik. Run this once when you first install qwik. Running this later on will not nuke anything you have created. Most importantly, this command creates the _default modular host file, which should always be present and enabled. This is the default host file that ships with OS X."
   echo
   echo "$EXECUTABLE add <host-file>"
-  echo "  Creates a new modular host file named <host-file> in hosts-available and opens it for editing in for environment's default editor."
+  echo "  Creates a new modular host file named <host-file> in hosts-available."
   echo
   echo "$EXECUTABLE remove <host-file>, $EXECUTABLE rm <host-file>"
   echo "  Deletes the specified host file from hosts-available. This is irreversible. Will prompt for confirmation."
