@@ -150,7 +150,7 @@ list_hosts() {
 }
 
 show_info() {
-  VERSION="0.1.1"
+  VERSION="0.1.2"
   echo "qwik-hosts version $VERSION"
   echo "https://github.com/RichardSchmitz/qwik-hosts"
 }
