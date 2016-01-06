@@ -73,8 +73,8 @@ remove_hosts() {
     case $response in
       [yY][eE][sS]|[yY])
         echo "Deleting $file_name"
-        rm  -v "$DIR_HOSTS_ENABLED/$file_name"
-        rm  -v "$DIR_HOSTS_AVAILABLE/$file_name"
+        rm  -f "$DIR_HOSTS_ENABLED/$file_name"
+        rm  "$DIR_HOSTS_AVAILABLE/$file_name"
         ;;
       *)
         ;;
@@ -141,13 +141,17 @@ list_hosts() {
 }
 
 show_info() {
-  VERSION="0.1.0"
+  VERSION="0.1.1"
   echo "qwik-hosts version $VERSION"
   echo "https://github.com/RichardSchmitz/qwik-hosts"
 }
 
 show_help() {
-  echo "This command is used to easily modify your machine's hosts file (/etc/hosts). It does so by combining multiple modular host files into a single one. The modular host files live in $DIR_HOSTS_AVAILABLE and enabled host files are symlinked in $DIR_HOSTS_ENABLED. Use the following commands to manage your modular host files:"
+  echo "This utility is used to easily modify your machine's hosts file (/etc/hosts). It does so by combining multiple modular host files into a single one."
+  echo
+  echo "Usage: $EXECUTABLE [ --version ] [ --help ] <command>"
+  echo
+  echo "Use the following commands to manage your modular host files:"
   echo
   echo "$EXECUTABLE init"
   echo "  Creates the basic infrastructure to support qwik. Run this once when you first install qwik. Running this later on will not nuke anything you have created. Most importantly, this command creates the _default modular host file, which should always be present and enabled. This is the default host file that ships with OS X."
@@ -155,7 +159,7 @@ show_help() {
   echo "$EXECUTABLE add <host-file>"
   echo "  Creates a new modular host file named <host-file> in hosts-available and opens it for editing in for environment's default editor."
   echo
-  echo "$EXECUTABLE remove <host-file>"
+  echo "$EXECUTABLE remove <host-file>, $EXECUTABLE rm <host-file>"
   echo "  Deletes the specified host file from hosts-available. This is irreversible. Will prompt for confirmation."
   echo
   echo "$EXECUTABLE edit <host-file>"
@@ -173,13 +177,13 @@ show_help() {
   echo "sudo $EXECUTABLE refresh"
   echo "  Rewrites your system's hosts file with the current configurations as shown by '$EXECUTABLE list'. This requires 'sudo' because /etc/hosts is read-only."
   echo
-  echo "$EXECUTABLE list"
+  echo "$EXECUTABLE list, $EXECUTABLE ls"
   echo "  Lists all available modular host files along with their current status (enabled/disabled) and a short description if available."
   echo
-  echo "$EXECUTABLE version"
+  echo "$EXECUTABLE --version, $EXECUTABLE -v"
   echo "  Prints the version and quits."
   echo
-  echo "$EXECUTABLE help"
+  echo "$EXECUTABLE --help, $EXECUTABLE -h"
   echo "  Displays this help and quits."
 }
 
@@ -195,7 +199,7 @@ case $CMD in
     fi
     add_hosts "${@:2}"
     ;;
-  remove)
+  rm|remove)
     if [ $# -lt 2 ]; then
       echo "Usage: $EXECUTABLE remove <host-file> [<host-file>...]"
       exit $ERR_BAD_USAGE
@@ -233,18 +237,18 @@ case $CMD in
   refresh)
     write_hosts_file
     ;;
-  list)
+  ls|list)
     list_hosts
     ;;
-  version)
+  -v|--version)
     show_info
     ;;
-  help)
+  -h|--help)
     show_help
     ;;
   *)
     echo "$EXECUTABLE: unrecognized command '$CMD'" 
-    echo "Try '$EXECUTABLE help' for options."
+    echo "Try '$EXECUTABLE --help' for options."
     ;;
 esac
 
