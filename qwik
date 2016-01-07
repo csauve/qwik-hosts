@@ -140,12 +140,13 @@ EOM
 list_hosts() {
   for host in `ls $DIR_HOSTS_AVAILABLE`; do
       enabled_str="disabled"
-      color_str="[0;31m"
+      color_start=`echo -e '\033[0;31m'`
     if [ -h "$DIR_HOSTS_ENABLED/$host" ]; then
       enabled_str="enabled"
-      color_str="[0;32m"
+      color_start=`echo -e '\033[0;32m'`
     fi
-    printf "%-30s \e$color_str%11s\e[m" $host "($enabled_str)" | sed -e 's/ /./g'
+    color_end=`echo -e '\033[0m'`
+    printf "%-30s %11s" $host "($enabled_str)" | sed -E -e 's/ /./g' -e "s/\((en|dis)abled\)/$color_start&$color_end/"
   done
 }
 
