@@ -162,7 +162,7 @@ list_hosts() {
 }
 
 show_info() {
-  VERSION="0.2.0"
+  VERSION="0.2.1"
   echo "qwik-hosts version $VERSION"
   echo "https://github.com/RichardSchmitz/qwik-hosts"
 }
@@ -180,7 +180,7 @@ show_help() {
   echo "$EXECUTABLE add <host-file>"
   echo "  Creates a new modular host file named <host-file> in hosts-available."
   echo
-  echo "$EXECUTABLE remove <host-file>, $EXECUTABLE rm <host-file>"
+  echo "$EXECUTABLE remove <host-file> [<host-file>...], $EXECUTABLE rm <host-file> [<host-file>...]"
   echo "  Deletes the specified host file from hosts-available. This is irreversible. Will prompt for confirmation."
   echo
   echo "$EXECUTABLE edit <host-file>"
