@@ -25,7 +25,7 @@ Now the environment is ready to go. You should see one host file is already enab
 
 ```
 $ qwik list
-_default.........................(enabled)
+_default.........................(enabled): Default Mac OS X hosts - do not disable!
 ```
 
 You should not disable or remove this host file as it is required by OS X during the boot process. Note that if you are not on OS X you will have to replace this default host file with the default host file from your OS. Do this using `qwik edit _default`.
