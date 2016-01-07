@@ -64,13 +64,18 @@ check_env() {
   fi
 }
 
+create() {
+  file_name=$1
+  echo "# $file_name" > "$DIR_HOSTS_AVAILABLE/$file_name"
+}
+
 add_hosts() {
   for file_name in "$@"; do
     if [ -f "$DIR_HOSTS_AVAILABLE/$file_name" ]; then
       echo "Error: $file_name already exists. Use 'qwik edit $file_name'."
       exit $ERR_BAD_USAGE
     fi
-    echo "# $file_name" > "$DIR_HOSTS_AVAILABLE/$file_name"
+    create $file_name
   done
 
   # Need to do a refresh. todo
@@ -97,6 +102,10 @@ edit_host() {
   check_env
 
   file_name=$1
+  if [ ! -f "$DIR_HOSTS_AVAILABLE/$file_name" ]; then
+    create $file_name
+  fi
+
   $EDITOR "$DIR_HOSTS_AVAILABLE/$file_name"
 }
 
@@ -175,7 +184,7 @@ show_help() {
   echo "$EXECUTABLE edit <host-file>"
   echo "  Opens the specified host file for editing in your environment's default editor."
   echo
-  echo "$EXECUTABLE show <host-file> [<host-file>...]"
+  echo "$EXECUTABLE show <host-file> [<host-file>...], $EXECUTABLE cat <host-file> [<host-file>...]"
   echo "  Prints the contents of the specified host-files to the stdout in the order given."
   echo
   echo "$EXECUTABLE enable <host-file> [<host-file>...]"
@@ -223,7 +232,7 @@ case $CMD in
     fi
     edit_host $2
     ;;
-  show)
+  cat|show)
     if [ $# -lt 2 ]; then
       echo "Usage: $EXECUTABLE show <host-file> [<host-file>...]"
       exit $ERR_BAD_USAGE

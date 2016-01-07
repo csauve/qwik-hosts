@@ -12,6 +12,7 @@ create_test_qwikrc() {
 # It can be safely deleted.
 DIR_QWIK="\$(pwd)/test-hosts"
 HOSTS_FILE="\$DIR_QWIK/hosts"
+EDITOR=vim
 EOM
 }
 

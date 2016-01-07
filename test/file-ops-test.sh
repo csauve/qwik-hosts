@@ -28,6 +28,19 @@ it_creates_new_host() {
   [ 2 -eq $status ]
 }
 
+it_creates_new_host_if_dne() {
+  # Edit a host that does not exist
+  ./qwik edit host1 <<< :wq
+  [ -f "./test-hosts/hosts-available/host1" ]
+  grep -q '# host1' "./test-hosts/hosts-available/host1"
+
+  # Editing it again does not try to create a new file
+  ./qwik edit host1 <<< :wq
+  [ -f "./test-hosts/hosts-available/host1" ]
+  [ `grep -c '# host1' "./test-hosts/hosts-available/host1"` -eq 1 ]
+
+}
+
 it_removes_a_host() {
   # Add a new host and then remove it
   ./qwik add host2
