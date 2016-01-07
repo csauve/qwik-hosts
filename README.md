@@ -59,7 +59,6 @@ Tests follow the [roundup](http://bmizerany.github.io/roundup/) shell unit testi
 Qwik-hosts works well as-is, but there is always room in a project for improvement. I have the following features in mind for future development:
 
 * Auto-refresh host file after disabling/removing a modular file
-* Parse description comment out of file and display when listing
 * Implement qwik mv and qwik cp
 * Add note to hosts file saying what modules were included and add status line to qwik list showing whether these match the currently enabled host modules
 * Add env variable that overrides _default hosts file content (to support other OSes)

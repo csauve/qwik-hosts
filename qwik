@@ -45,6 +45,7 @@ initialize() {
   fi
 
   cat > "$DIR_HOSTS_AVAILABLE/_default" << EOM
+# _default: Default Mac OS X hosts - do not disable!
 # localhost is used to configure the loopback interface
 # when the system is booting.  Do not change this entry.
 ##
@@ -66,7 +67,7 @@ check_env() {
 
 create() {
   file_name=$1
-  echo "# $file_name" > "$DIR_HOSTS_AVAILABLE/$file_name"
+  echo "# $file_name: (short description here)" > "$DIR_HOSTS_AVAILABLE/$file_name"
 }
 
 add_hosts() {
@@ -155,7 +156,8 @@ list_hosts() {
       color_start=`echo -e '\033[0;32m'`
     fi
     color_end=`echo -e '\033[0m'`
-    printf "%-30s %11s" $host "($enabled_str)" | sed -E -e 's/ /./g' -e "s/\((en|dis)abled\)/$color_start&$color_end/"
+    short_desc=`cat "$DIR_HOSTS_AVAILABLE/$host" | head -n 1 | grep "# $host: " | sed "s/^# $host: //" | tr '/' '|' | tr -d '\n'`
+    printf "%-30s %11s" $host "($enabled_str)" | sed -E -e 's/ /./g' -e "s/\((en|dis)abled\)/$color_start&$color_end/" -e "s/$/: $short_desc/"
   done
 }
 
