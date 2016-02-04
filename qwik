@@ -124,6 +124,7 @@ enable_hosts() {
       echo "Error: the modular host file '$file_name' does not exist. Cannot enable. Use '$EXECUTABLE add $file_name'."
     fi
   done
+  echo "Don't forget to 'sudo qwik refresh'!"
 }
 
 disable_hosts() {
@@ -162,7 +163,7 @@ list_hosts() {
 }
 
 show_info() {
-  VERSION="0.2.1"
+  VERSION="0.2.2"
   echo "qwik-hosts version $VERSION"
   echo "https://github.com/RichardSchmitz/qwik-hosts"
 }
@@ -179,6 +180,9 @@ show_help() {
   echo
   echo "$EXECUTABLE add <host-file>"
   echo "  Creates a new modular host file named <host-file> in hosts-available."
+  echo
+  echo "$EXECUTABLE fast-add <host-file>, $EXECUTABLE fadd <host-file>"
+  echo "  An extra-fast way to add, edit and enable a new modular host file."
   echo
   echo "$EXECUTABLE remove <host-file> [<host-file>...], $EXECUTABLE rm <host-file> [<host-file>...]"
   echo "  Deletes the specified host file from hosts-available. This is irreversible. Will prompt for confirmation."
@@ -215,42 +219,51 @@ case $CMD in
     ;;
   add)
     if [ $# -lt 2 ]; then
-      echo "Usage: $EXECUTABLE add <host-file> [<host-file>...]"
+      echo "Usage: $EXECUTABLE $CMD <host-file> [<host-file>...]"
       exit $ERR_BAD_USAGE
     fi
     add_hosts "${@:2}"
     ;;
+  fadd|fast-add)
+    if [ $# -ne 2 ]; then
+      echo "Usage: $EXECUTABLE $CMD <host-file>"
+      exit $ERR_BAD_USAGE
+    fi
+    add_hosts $2
+    edit_host $2
+    enable_hosts $2
+    ;;
   rm|remove)
     if [ $# -lt 2 ]; then
-      echo "Usage: $EXECUTABLE remove <host-file> [<host-file>...]"
+      echo "Usage: $EXECUTABLE $CMD <host-file> [<host-file>...]"
       exit $ERR_BAD_USAGE
     fi
     remove_hosts "${@:2}"
     ;;
   edit)
     if [ $# -ne 2 ]; then
-      echo "Usage: $EXECUTABLE edit <host-file>"
+      echo "Usage: $EXECUTABLE $CMD <host-file>"
       exit $ERR_BAD_USAGE
     fi
     edit_host $2
     ;;
   cat|show)
     if [ $# -lt 2 ]; then
-      echo "Usage: $EXECUTABLE show <host-file> [<host-file>...]"
+      echo "Usage: $EXECUTABLE $CMD <host-file> [<host-file>...]"
       exit $ERR_BAD_USAGE
     fi
     show_hosts "${@:2}"
     ;;
   enable)
     if [ $# -lt 2 ]; then
-      echo "Usage: $EXECUTABLE enable <host-file> [<host-file>...]"
+      echo "Usage: $EXECUTABLE $CMD <host-file> [<host-file>...]"
       exit $ERR_BAD_USAGE
     fi
     enable_hosts "${@:2}"
     ;;
   disable)
     if [ $# -lt 2 ]; then
-      echo "Usage: $EXECUTABLE disable <host-file> [<host-file>...]"
+      echo "Usage: $EXECUTABLE $CMD <host-file> [<host-file>...]"
       exit $ERR_BAD_USAGE
     fi
     disable_hosts "${@:2}"
