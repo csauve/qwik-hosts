@@ -25,6 +25,10 @@ ERR_BAD_USAGE=2
 
 EXECUTABLE=`basename $0`
 
+refresh_reminder() {
+  echo "Don't forget to 'sudo qwik refresh'!"
+}
+
 initialize() {
   echo "Creating qwik directory tree and installing _default host file..."
   if [ ! -d $DIR_QWIK ]; then
@@ -78,8 +82,6 @@ add_hosts() {
     fi
     create $file_name
   done
-
-  # Need to do a refresh. todo
 }
 
 remove_hosts() {
@@ -96,7 +98,7 @@ remove_hosts() {
     esac
   done
 
-  # Need to do a refresh. todo
+  refresh_reminder
 }
 
 edit_host() {
@@ -124,13 +126,16 @@ enable_hosts() {
       echo "Error: the modular host file '$file_name' does not exist. Cannot enable. Use '$EXECUTABLE add $file_name'."
     fi
   done
-  echo "Don't forget to 'sudo qwik refresh'!"
+
+  refresh_reminder
 }
 
 disable_hosts() {
   for file_name in "$@"; do
     rm -f "$DIR_HOSTS_ENABLED/$file_name"
   done
+
+  refresh_reminder
 }
 
 write_hosts_file() {
@@ -163,7 +168,7 @@ list_hosts() {
 }
 
 show_info() {
-  VERSION="0.2.2"
+  VERSION="0.2.3"
   echo "qwik-hosts version $VERSION"
   echo "https://github.com/RichardSchmitz/qwik-hosts"
 }
@@ -200,7 +205,7 @@ show_help() {
   echo "  Disables the DNS entries given in the <host-file>(s)."
   echo
   echo "sudo $EXECUTABLE refresh"
-  echo "  Rewrites your system's hosts file with the current configurations as shown by '$EXECUTABLE list'. This requires 'sudo' because /etc/hosts is read-only."
+  echo "  Rewrites your system's hosts file with the current configurations as shown by '$EXECUTABLE list'. This will probably require 'sudo' because /etc/hosts is read-only."
   echo
   echo "$EXECUTABLE list, $EXECUTABLE ls"
   echo "  Lists all available modular host files along with their current status (enabled/disabled) and a short description if available."
