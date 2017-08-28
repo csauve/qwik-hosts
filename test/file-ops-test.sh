@@ -28,6 +28,25 @@ it_creates_new_host() {
   [ 2 -eq $status ]
 }
 
+it_links_host_files() {
+  # Try to link nonexistent hostfile
+  status=$(set +e ; ./qwik link /tmp/tmp-hostfile >/dev/null ; echo $?)
+  [ 2 -eq $status ]
+
+  # Now, create the file and try again
+  echo "# host1" > /tmp/tmp-hostfile
+  ./qwik link host1
+  [ -f "./test-hosts/hosts-available/tmp-hostfile" ]
+  grep -q '# host1' "./test-hosts/hosts-available/tmp-hostfile"
+
+  # Can't link a host if it already exists
+  status=$(set +e ; ./qwik link /tmp/tmp-hostfile >/dev/null ; echo $?)
+  [ 2 -eq $status ]
+
+  # Cleanup
+  rm /tmp/tmp-hostfile
+}
+
 it_creates_new_host_if_dne() {
   # Edit a host that does not exist
   ./qwik edit host1 <<< :wq

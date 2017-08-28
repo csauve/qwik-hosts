@@ -53,7 +53,7 @@ Just in case you're using `qwik` as part of a script, it may be helpful to know 
 
 ## Development
 ### Running Tests
-Tests follow the [roundup](http://bmizerany.github.io/roundup/) shell unit testing framework. Install roundup using `brew install roundup`. Run all tests using `roundup tests/*`, or run a specific test using `roundup tests/refresh-test.sh`. *Important:* These tests must be run from within the root directory of the repository.
+Tests follow the [roundup](http://bmizerany.github.io/roundup/) shell unit testing framework. Install roundup using `brew install roundup`. Run all tests using `roundup test/*`, or run a specific test using `roundup test/refresh-test.sh`. *Important:* These tests must be run from within the root directory of the repository.
 
 ### Todo
 Qwik-hosts works well as-is, but there is always room in a project for improvement. I have the following features in mind for future development:

@@ -55,7 +55,7 @@ initialize() {
 ##
 127.0.0.1       localhost
 255.255.255.255 broadcasthost
-::1             localhost 
+::1             localhost
 fe80::1%lo0     localhost
 EOM
 
@@ -74,6 +74,12 @@ create() {
   echo "# $file_name: (short description here)" > "$DIR_HOSTS_AVAILABLE/$file_name"
 }
 
+link() {
+  link_path=$1
+  file_name=$(basename $1)
+  ln -s "$link_path" "$DIR_HOSTS_AVAILABLE/$file_name"
+}
+
 add_hosts() {
   for file_name in "$@"; do
     if [ -f "$DIR_HOSTS_AVAILABLE/$file_name" ]; then
@@ -81,6 +87,21 @@ add_hosts() {
       exit $ERR_BAD_USAGE
     fi
     create $file_name
+  done
+}
+
+link_hosts() {
+  for file_name in "$@"; do
+    if [ -f "$DIR_HOSTS_AVAILABLE/$file_name" ]; then
+      echo "Error: $file_name already exists. Use 'qwik edit $file_name'."
+      exit $ERR_BAD_USAGE
+    fi
+    if [[ "${file_name:0:1}" = "/" && -f "$file_name" ]]; then
+      link $file_name
+    else
+      echo "Error: '$file_name' does not exist or is not an absolute path."
+      exit $ERR_BAD_USAGE
+    fi
   done
 }
 
@@ -229,6 +250,13 @@ case $CMD in
     fi
     add_hosts "${@:2}"
     ;;
+  link)
+    if [ $# -lt 2 ]; then
+      echo "Usage: $EXECUTABLE $CMD <host-file> [<host-file>...]"
+      exit $ERR_BAD_USAGE
+    fi
+    link_hosts "${@:2}"
+    ;;
   fadd|fast-add)
     if [ $# -ne 2 ]; then
       echo "Usage: $EXECUTABLE $CMD <host-file>"
@@ -286,7 +314,7 @@ case $CMD in
     show_help
     ;;
   *)
-    echo "$EXECUTABLE: unrecognized command '$CMD'" 
+    echo "$EXECUTABLE: unrecognized command '$CMD'"
     echo "Try '$EXECUTABLE --help' for options."
     ;;
 esac
