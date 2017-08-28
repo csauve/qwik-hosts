@@ -30,7 +30,7 @@ _default.........................(enabled): Default Mac OS X hosts - do not disa
 
 You should not disable or remove this host file as it is required by OS X during the boot process. Note that if you are not on OS X you will have to replace this default host file with the default host file from your OS. Do this using `qwik edit _default`.
 
-Now you can take your kludged-together host file and split it up into manageable pieces. Use `qwik add <host-file>` to add a new host file. Then run `qwik edit <host-file>` and paste in a section from your old file. To enable it, run `qwik enable <host-file>`.
+Now you can take your kludged-together host file and split it up into manageable pieces. Use `qwik add <host-file>` to add a new host file. Then run `qwik edit <host-file>` and paste in a section from your old file. Alternatively, use `qwik link <host-file-path>` to link to an existing partial hostfile. To enable it, run `qwik enable <host-file>`.
 
 One last thing: all we've done so far is define new host files. We haven't actually rewritten the master file at `/etc/hosts` yet. To do this, run `qwik refresh` (you may want to save a backup first, until you're satisfied that things are working as expected).
 
